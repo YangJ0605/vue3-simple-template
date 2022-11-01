@@ -15,6 +15,13 @@ export default defineConfig({
   plugins: [vue(), vueJsx(), Unocss()],
   server: {
     host: true,
-    port: 8888
+    port: 8888,
+    proxy: {
+      '/api': {
+        target: 'https://test-kube-auth-manager.deeproute.cn/api/v1',
+        changeOrigin: true,
+        rewrite: path => path.replace('/api', '')
+      }
+    }
   }
 })

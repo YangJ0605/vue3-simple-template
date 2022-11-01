@@ -5,4 +5,8 @@ declare module 'axios' {
     data?: T
     needToken?: boolean
   }
+
+  interface AxiosResponse<T = any, D = any> {
+    [key: string]: any
+  }
 }

@@ -5,13 +5,13 @@
         <img :src="loginBgNormal" width="500" />
       </div>
       <div class="login-form">
-        <h1 class="form-title">后台管理模板</h1>
+        <h1 class="form-title">kube-auth-manager</h1>
         <div class="form-item">
           <el-input
             v-model="data.info.username"
             size="large"
             type="text"
-            placeholder="username: 1"
+            placeholder="用户名"
             clearable
           >
             <template #prefix>
@@ -25,7 +25,7 @@
             size="large"
             type="password"
             show-password
-            placeholder="password: 1"
+            placeholder="密码"
             clearable
           >
             <template #prefix>
@@ -65,11 +65,16 @@
 </script>
 
 <script setup lang="ts">
-  import { reactive, onMounted, computed } from 'vue'
+  import { reactive } from 'vue'
 
   import { User, Lock } from '@element-plus/icons-vue'
 
   import './style.scss'
+  import { apiLogin } from '@/api'
+  import { useMenuStore } from '@/store'
+  import router from '@/router'
+
+  const menuStore = useMenuStore()
 
   const loginBgNormal = new URL(
     '../../assets/images/login-bg.svg',
@@ -82,16 +87,28 @@
   ).href
   const data = reactive({
     info: {
-      username: 'admin',
-      password: 'admin'
+      username: localStorage.getItem('username') || '',
+      password: localStorage.getItem('password') || ''
     },
     remembered: true,
     // 请求中状态
     spinning: false
   })
 
-  const login = () => {
-    console.log('login')
-    window.$message?.success('成功')
+  const login = async () => {
+    const { username, password } = data.info
+    if (data.remembered) {
+      localStorage.setItem('username', username)
+      localStorage.setItem('password', password)
+    }
+    const res = await apiLogin(data.info.username, data.info.password)
+    if (res.token) {
+      window.$message?.success('登录成功！')
+      sessionStorage.setItem('token', res.token)
+      sessionStorage.setItem('userInfo', JSON.stringify(res.user))
+      menuStore.resetMenu({ newRoutes: [] })
+      const redirect = router.currentRoute.value.query.redirect as string
+      router.push(redirect || '/')
+    }
   }
 </script>

@@ -29,7 +29,7 @@ axiosInstance.interceptors.request.use(
   }
 )
 
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   response => {
     const { status } = response
     if (status === 200 || status < 300 || status === 304) {

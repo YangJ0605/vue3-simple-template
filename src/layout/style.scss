@@ -1,0 +1,118 @@
+@mixin hidden-words {
+  overflow: hidden; //超出的文本隐藏
+  text-overflow: ellipsis; //溢出用省略号显示
+  white-space: nowrap; //溢出不换行
+}
+
+// 黑色主题菜单背景色
+// $darkMenuBack: rgb(0, 17, 30);
+// // 白色主题菜单背景色
+// $lightMenuBack: rgb(255, 255, 255);
+
+.wrapper {
+  display: flex;
+  height: 100%;
+
+  .layout-aside {
+    width: 210px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: all 0.2s;
+    border-right: 1px solid var(--el-border-color);
+    color: var(--el-text-color-regular);
+
+    .logo {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      @include hidden-words;
+
+      img {
+        width: 32px;
+        height: 32px;
+      }
+
+      span {
+        font-size: 18px;
+        font-weight: 600;
+        padding-left: 10px;
+      }
+    }
+
+    .menu-container {
+      height: calc(100vh - 128px);
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 0 !important;
+      }
+    }
+
+    .copyright {
+      font-size: 14px;
+      padding: 16px;
+      text-align: center;
+      @include hidden-words;
+
+      span {
+        line-height: 32px;
+      }
+    }
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    flex-shrink: 0;
+
+    .layout-header {
+      background-color: var(--el-bg-color);
+    }
+
+    .layout-main {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background-color: var(--el-bg-color);
+    }
+  }
+}
+
+.aside-close {
+  .layout-aside {
+    width: 64px;
+  }
+
+  .layout {
+    width: calc(100% - 64px);
+  }
+
+  // .logo {
+  //   border-right: none;
+  // }
+}
+
+// 970px以下视为移动设备
+// @media (max-width: 970px) {
+.is-mobile {
+  .layout-aside {
+    width: 210px;
+
+    .menu-container {
+      height: calc(100vh - 168px);
+    }
+  }
+
+  .layout {
+    width: 100%;
+  }
+
+  .layout-aside {
+    border: none;
+  }
+}
+// }
